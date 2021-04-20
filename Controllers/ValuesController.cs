@@ -566,7 +566,6 @@ namespace WebKhachSan.Controllers
                 if (dk == null) return false;
                 else
                 {
-                    dk.MaDK = id;
                     dk.MaKH = cusid;
                     dk.SoPhong = roomName;
                     dk.NgayVao = cin;
