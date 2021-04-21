@@ -260,16 +260,18 @@ namespace WebKhachSan.Controllers
         //Thêm khách hàng
         [HttpPost]
         [Route("customer/add")]
-        public bool AddCustomer(string id,string type,string name,DateTime dob,bool sex,string address,string phonenumb,int point,string email,string pass)
+        public bool AddCustomer(string id,string name,string address,string phonenumb,string email,string pass)
         {
+
             try
             {
+                DateTime date = new DateTime(2000, 1, 1);
                 tChiTietKH kh = new tChiTietKH();
                 kh.MaKH = id;
-                kh.LoaiKH = type;
+                kh.LoaiKH = "001";
                 kh.TenKH = name;
-                kh.NgaySinh = dob;
-                kh.Phai = sex;
+                kh.NgaySinh = date;
+                kh.Phai = false;
                 kh.DiaChi = address;
                 kh.DienThoai = phonenumb;
                 kh.DiemTichLuy = 0;
@@ -284,6 +286,23 @@ namespace WebKhachSan.Controllers
                 return false;
             }
         }
+        //Kiểm tra đăng nhập
+        [HttpPost]
+        [Route("account/signin")]
+        public bool SignIn(string email,string password)
+        {
+            List<tChiTietKH> kh = db.tChiTietKHs.ToList();
+            foreach(var item in kh)
+            {
+                if (item.Email == email && item.password == password)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
         // xóa khách hàng
         [HttpDelete]
         [Route("customer/delete")]
