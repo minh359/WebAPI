@@ -93,7 +93,7 @@ namespace WebKhachSan.Controllers
         //Thêm loại phòng
         [HttpPost]
         [Route("lp/add")]
-        public bool AddType(string loai,string mota,int dongia,string hinhanh,string dientich,char sogiuong,char sophongngu,char bontam,char sophongtam,int slp)
+        public bool AddType(string loai,string mota,int dongia,string hinhanh,string dientich,char sogiuong,char sophongngu,char bontam,char sophongtam,int slp,int songuoi)
         {
             try
             {
@@ -108,6 +108,7 @@ namespace WebKhachSan.Controllers
                 lp.BonTam = bontam;
                 lp.SoPhongTam = sophongtam;
                 lp.SoLuongPhong = slp;
+                lp.SoNguoi = sogiuong;
                 db.tLoaiPhongs.InsertOnSubmit(lp);
                 db.SubmitChanges();
                 return true;
@@ -120,7 +121,7 @@ namespace WebKhachSan.Controllers
         //Cập nhật thông tin về loại phòng
         [HttpPut]
         [Route("lp/update")]
-        public bool UpdateType(string loai, string mota, int dongia, string hinhanh, string dientich, char sogiuong, char sophongngu, char bontam, char sophongtam, int slp)
+        public bool UpdateType(string loai, string mota, int dongia, string hinhanh, string dientich, char sogiuong, char sophongngu, char bontam, char sophongtam, int slp,int songuoi)
         {
             try
             {
@@ -135,6 +136,7 @@ namespace WebKhachSan.Controllers
                     lp.SoGiuong = sogiuong;
                     lp.SoPhongNgu = sophongngu;
                     lp.BonTam = bontam;
+                    lp.SoNguoi = sogiuong;
                     lp.SoPhongTam = sophongtam;
                     lp.SoLuongPhong = slp;
                     db.SubmitChanges();
