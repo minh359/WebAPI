@@ -75,9 +75,17 @@ namespace WebKhachSan.Controllers
         [Route("lp")]
         public List<tLoaiPhong> HienLoaiPhong()
         {
-
             return db.tLoaiPhongs.ToList();
         }
+        //Hiện phòng theo id
+        [HttpGet]
+        [Route("lp")]
+        public List<tLoaiPhong> GetRoomById(string id)
+        {
+            return db.tLoaiPhongs.Where(n => n.LoaiPhong.Equals(id)).ToList();
+        }
+
+
         //Hiện số lượng phòng còn trống theo loại
         [HttpGet]
         [Route("lp")]
@@ -108,7 +116,7 @@ namespace WebKhachSan.Controllers
                 lp.BonTam = bontam;
                 lp.SoPhongTam = sophongtam;
                 lp.SoLuongPhong = slp;
-                lp.SoNguoi = sogiuong;
+                lp.SoNguoi = songuoi;
                 db.tLoaiPhongs.InsertOnSubmit(lp);
                 db.SubmitChanges();
                 return true;
@@ -252,7 +260,7 @@ namespace WebKhachSan.Controllers
         //Thêm khách hàng
         [HttpPost]
         [Route("customer/add")]
-        public bool AddCustomer(string id,string type,string name,DateTime dob,bool sex,string address,string phonenumb,int point,string identify,string pass)
+        public bool AddCustomer(string id,string type,string name,DateTime dob,bool sex,string address,string phonenumb,int point,string email,string pass)
         {
             try
             {
@@ -265,7 +273,7 @@ namespace WebKhachSan.Controllers
                 kh.DiaChi = address;
                 kh.DienThoai = phonenumb;
                 kh.DiemTichLuy = 0;
-                kh.TheCanCuoc = identify;
+                kh.Email = email;
                 kh.password = pass;
                 db.tChiTietKHs.InsertOnSubmit(kh);
                 db.SubmitChanges();
@@ -317,7 +325,7 @@ namespace WebKhachSan.Controllers
                     kh.DiaChi = address;
                     kh.DienThoai = phonenumb;
                     kh.DiemTichLuy = 0;
-                    kh.TheCanCuoc = identify;
+                    kh.Email = identify;
                     kh.password = pass;
                     db.SubmitChanges();
                     return true;
