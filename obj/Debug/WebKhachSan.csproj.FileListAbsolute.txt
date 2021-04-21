@@ -159,3 +159,7 @@ D:\data\LT Web ASP.Net\Bài tập\BTL\WebKhachSan\bin\System.Runtime.CompilerSer
 D:\data\LT Web ASP.Net\Bài tập\BTL\WebKhachSan\bin\System.Text.Encodings.Web.xml
 D:\data\LT Web ASP.Net\Bài tập\BTL\WebKhachSan\bin\System.Threading.Tasks.Extensions.xml
 D:\data\LT Web ASP.Net\Bài tập\BTL\WebKhachSan\bin\System.Web.Http.Cors.xml
+D:\data\LT Web ASP.Net\Bài tập\BTL\WebKhachSan\bin\EntityFramework.dll
+D:\data\LT Web ASP.Net\Bài tập\BTL\WebKhachSan\bin\EntityFramework.SqlServer.dll
+D:\data\LT Web ASP.Net\Bài tập\BTL\WebKhachSan\bin\EntityFramework.xml
+D:\data\LT Web ASP.Net\Bài tập\BTL\WebKhachSan\bin\EntityFramework.SqlServer.xml

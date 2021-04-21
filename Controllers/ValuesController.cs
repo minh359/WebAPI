@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using WebKhachSan.Models;
 
+
 namespace WebKhachSan.Controllers
 {
 
@@ -74,12 +75,25 @@ namespace WebKhachSan.Controllers
         [Route("lp")]
         public List<tLoaiPhong> HienLoaiPhong()
         {
+
             return db.tLoaiPhongs.ToList();
+        }
+        //Hiện số lượng phòng còn trống theo loại
+        [HttpGet]
+        [Route("lp")]
+        public int SoPhongConTrongTheoLoai(string  type)
+        {
+            int kq;
+            var query = from r in db.tSoPhong_LoaiPhongs
+                        where r.LoaiPhong.Equals(type) && r.GhiChu.Equals("Còn trống")
+                        select r;
+            kq = query.Count();
+            return kq;
         }
         //Thêm loại phòng
         [HttpPost]
         [Route("lp/add")]
-        public bool AddType(string loai,string mota,int dongia,string hinhanh,string dientich,char sogiuong,char sophongngu,char bontam,char sophongtam,double gia)
+        public bool AddType(string loai,string mota,int dongia,string hinhanh,string dientich,char sogiuong,char sophongngu,char bontam,char sophongtam,int slp)
         {
             try
             {
@@ -93,7 +107,7 @@ namespace WebKhachSan.Controllers
                 lp.SoPhongNgu = sophongngu;
                 lp.BonTam = bontam;
                 lp.SoPhongTam = sophongtam;
-                lp.Gia = gia;
+                lp.SoLuongPhong = slp;
                 db.tLoaiPhongs.InsertOnSubmit(lp);
                 db.SubmitChanges();
                 return true;
@@ -106,7 +120,7 @@ namespace WebKhachSan.Controllers
         //Cập nhật thông tin về loại phòng
         [HttpPut]
         [Route("lp/update")]
-        public bool UpdateType(string loai, string mota, int dongia, string hinhanh, string dientich, char sogiuong, char sophongngu, char bontam, char sophongtam, double gia)
+        public bool UpdateType(string loai, string mota, int dongia, string hinhanh, string dientich, char sogiuong, char sophongngu, char bontam, char sophongtam, int slp)
         {
             try
             {
@@ -114,7 +128,6 @@ namespace WebKhachSan.Controllers
                 if (lp == null) return false;
                 else
                 {
-                    lp.LoaiPhong = loai;
                     lp.MoTa = mota;
                     lp.DonGia = dongia;
                     lp.HinhAnh = hinhanh;
@@ -123,7 +136,7 @@ namespace WebKhachSan.Controllers
                     lp.SoPhongNgu = sophongngu;
                     lp.BonTam = bontam;
                     lp.SoPhongTam = sophongtam;
-                    lp.Gia = gia;
+                    lp.SoLuongPhong = slp;
                     db.SubmitChanges();
                     return true;
                 }    
@@ -184,6 +197,7 @@ namespace WebKhachSan.Controllers
         {
             try
             {
+                notice = "Còn trống";
                 tSoPhong_LoaiPhong r = new tSoPhong_LoaiPhong();
                     r.SoPhong = name;
                     r.LoaiPhong = type;
@@ -208,7 +222,6 @@ namespace WebKhachSan.Controllers
                 if (r == null) return false;
                 else
                 {
-                    r.SoPhong = name;
                     r.LoaiPhong = type;
                     r.GhiChu = notice;
                     db.SubmitChanges();
@@ -295,7 +308,6 @@ namespace WebKhachSan.Controllers
                 if (kh == null) return false;
                 else
                 {
-                    kh.MaKH = id;
                     kh.LoaiKH = type;
                     kh.TenKH = name;
                     kh.NgaySinh = dob;
@@ -361,17 +373,17 @@ namespace WebKhachSan.Controllers
         //Thêm đơn
         [HttpPost]
         [Route("order/add")]
-        public bool AddOrder(string id,string cusid,string address,string companyName,string code,string companyAddress)
+        public bool AddOrder(string id,string cusid,string email,string note,DateTime dayin,DateTime dayout)
         {
             try
             {
                 tDatPhong dp = new tDatPhong();
                 dp.MaDP = id;
                 dp.MaKH = cusid;
-                dp.Diachi = address;
-                dp.TenCongTy = companyName;
-                dp.MaSoThue = code;
-                dp.DiaChiCty = companyAddress;
+                dp.Email= email;
+                dp.GhiChu = note;
+                dp.NgayVao = dayin;
+                dp.NgayRa = dayout;
                 db.tDatPhongs.InsertOnSubmit(dp);
                 db.SubmitChanges();
                 return true;
@@ -406,7 +418,7 @@ namespace WebKhachSan.Controllers
 
         [HttpPut]
         [Route("order/update")]
-        public bool UpdateOrder(string id, string cusid, string address, string companyName, string code, string companyAddress)
+        public bool UpdateOrder(string id, string cusid, string email, string note, DateTime dayin, DateTime dayout)
         {
             try
             {
@@ -414,12 +426,11 @@ namespace WebKhachSan.Controllers
                 if (dp == null) return false;
                 else
                 {
-                    dp.MaDP = id;
                     dp.MaKH = cusid;
-                    dp.Diachi = address;
-                    dp.TenCongTy = companyName;
-                    dp.MaSoThue = code;
-                    dp.DiaChiCty = companyAddress;
+                    dp.Email = email;
+                    dp.GhiChu = note;
+                    dp.NgayVao = dayin;
+                    dp.NgayRa = dayout;
                     db.SubmitChanges();
                     return true;
                 }    
@@ -489,7 +500,6 @@ namespace WebKhachSan.Controllers
                 if (ct == null) return false;
                 else
                 {
-                    ct.MaDP = id;
                     ct.LoaiPhong = type;
                     ct.SLPhongDat = amount;
                     db.SubmitChanges();
@@ -535,7 +545,7 @@ namespace WebKhachSan.Controllers
         //thêm đăng kí
         [HttpPost]
         [Route("booking/add")]
-        public bool AddBooking(string id,string cusid,string roomName,DateTime cin,DateTime cout)
+        public bool AddBooking(string id,string cusid,string roomName,DateTime dayin,DateTime dayout)
         {
             try
             {
@@ -543,8 +553,8 @@ namespace WebKhachSan.Controllers
                 dk.MaDK = id;
                 dk.MaKH = cusid;
                 dk.SoPhong = roomName;
-                dk.NgayVao = cin;
-                dk.NgayRa = cout;
+                dk.NgayVao = dayin;
+                dk.NgayRa = dayout;
                 db.tDangKies.InsertOnSubmit(dk);
                 db.SubmitChanges();
                 return true;
@@ -560,8 +570,8 @@ namespace WebKhachSan.Controllers
         [Route("booking/update")]
         public bool UpdateBooking(string id, string cusid, string roomName, DateTime cin, DateTime cout)
         {
-            //try
-            //{
+            try
+            {
                 tDangKy dk = db.tDangKies.Where(n => n.MaDK.Equals(id)).FirstOrDefault();
                 if (dk == null) return false;
                 else
@@ -572,13 +582,13 @@ namespace WebKhachSan.Controllers
                     dk.NgayRa = cout;
                     db.SubmitChanges();
                     return true;
-                }    
-                
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
+                }
+
+            }
+            catch
+            {
+                return false;
+            }
         }
         //xóa đăng kí
         [HttpDelete]

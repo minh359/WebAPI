@@ -22,9 +22,7 @@ namespace WebKhachSan
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-            //fix lỗi các khóa ngoại trong database
-            config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling =
-            Newtonsoft.Json.PreserveReferencesHandling.All;
+  
         }
     }
 }
